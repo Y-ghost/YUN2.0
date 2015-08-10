@@ -1,0 +1,66 @@
+/*===============================reset=================================*/
+/*html 5 reset end*/
+* {
+	margin: 0;
+	padding: 0;
+}
+
+ol, ul, menu {
+	list-style: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.mt20 {
+	margin-top: 20px !important;
+}
+
+.aysw-body {
+	margin: 0 auto;
+	width: 940px;
+	text-align: left;
+}
+
+.page-agreement h1 {
+	font-size: 20px;
+	padding: 20px 0 20px 0;
+}
+
+.page-agreement p {
+	padding: 10px 0;
+}
+
+.page-agreement h3 {
+	padding: 20px 0 10px 0;
+}
+/*colors*/
+.orange {
+	color: #F60 !important;
+}
+
+.gray {
+	color: #999 !important;
+}
+
+.darkgray {
+	color: #666 !important
+}
+
+.red {
+	color: #F00 !important;
+}
+
+.blue {
+	color: #06C !important;
+}
+
+.green {
+	color: #390 !important;
+}
+
+.black {
+	color: #000;
+}

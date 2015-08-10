@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rest.yun.mapping.ControlHostMapper" >
+  <resultMap id="BaseResultMap" type="com.rest.yun.beans.ControlHost" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="ProjectId" property="projectid" jdbcType="INTEGER" />
+    <result column="Code" property="code" jdbcType="VARCHAR" />
+    <result column="Createuser" property="createuser" jdbcType="INTEGER" />
+    <result column="Createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="Modifyuser" property="modifyuser" jdbcType="INTEGER" />
+    <result column="Modifytime" property="modifytime" jdbcType="TIMESTAMP" />
+    
+    <association property="project" column="projectId" select="selectProjectById"></association>
+  </resultMap>
+  
+  <!-- Select list result map -->
+   <resultMap id="listResultMap" type="map" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="ProjectId" property="projectid" jdbcType="INTEGER" />
+    <result column="Code" property="code" jdbcType="VARCHAR" />
+    <result column="projectName" property="projectName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <!-- 映射关联项目 -->
+  <resultMap id="projectMap" type="com.rest.yun.beans.Project" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="Name" property="name" jdbcType="VARCHAR" />
+    <result column="ProjectType" property="projecttype" jdbcType="INTEGER" />
+    <result column="Department" property="department" jdbcType="VARCHAR" />
+    <result column="Province" property="province" jdbcType="VARCHAR" />
+    <result column="City" property="city" jdbcType="VARCHAR" />
+    <result column="County" property="county" jdbcType="VARCHAR" />
+    <result column="Address" property="address" jdbcType="VARCHAR" />
+    <result column="Createuser" property="createuser" jdbcType="INTEGER" />
+    <result column="Createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="Modifyuser" property="modifyuser" jdbcType="INTEGER" />
+    <result column="Modifytime" property="modifytime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, ProjectId, Code, Createuser, Createtime, Modifyuser, Modifytime
+  </sql>
+  
+  <!-- 查询关联项目 -->
+  <select id="selectProjectById" resultMap="projectMap">
+  	select * from project where id = #{projectId}
+  </select>
+  <!-- 根据id查询主机信息 -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ControlHost
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <!-- 根据通讯地址查询主机信息 -->
+  <select id="selectByCode" resultMap="BaseResultMap" parameterType="String" >
+    select 
+    <include refid="Base_Column_List" />
+    from ControlHost
+    where Code = #{code,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ControlHost
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.rest.yun.beans.ControlHost" >
+    insert into ControlHost (id, ProjectId, Code, 
+      Createuser, Createtime, Modifyuser, 
+      Modifytime)
+    values (#{id,jdbcType=INTEGER}, #{projectid,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, 
+      #{createuser,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{modifyuser,jdbcType=INTEGER}, 
+      #{modifytime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rest.yun.beans.ControlHost" >
+    insert into ControlHost
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="projectid != null" >
+        ProjectId,
+      </if>
+      <if test="code != null" >
+        Code,
+      </if>
+      <if test="createuser != null" >
+        Createuser,
+      </if>
+      <if test="createtime != null" >
+        Createtime,
+      </if>
+      <if test="modifyuser != null" >
+        Modifyuser,
+      </if>
+      <if test="modifytime != null" >
+        Modifytime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="projectid != null" >
+        #{projectid,jdbcType=INTEGER},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="createuser != null" >
+        #{createuser,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyuser != null" >
+        #{modifyuser,jdbcType=INTEGER},
+      </if>
+      <if test="modifytime != null" >
+        #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rest.yun.beans.ControlHost" >
+    update ControlHost
+    <set >
+      <if test="projectid != null" >
+        ProjectId = #{projectid,jdbcType=INTEGER},
+      </if>
+      <if test="code != null" >
+        Code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="createuser != null" >
+        Createuser = #{createuser,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        Createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyuser != null" >
+        Modifyuser = #{modifyuser,jdbcType=INTEGER},
+      </if>
+      <if test="modifytime != null" >
+        Modifytime = #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rest.yun.beans.ControlHost" >
+    update ControlHost
+    set ProjectId = #{projectid,jdbcType=INTEGER},
+      Code = #{code,jdbcType=VARCHAR},
+      Createuser = #{createuser,jdbcType=INTEGER},
+      Createtime = #{createtime,jdbcType=TIMESTAMP},
+      Modifyuser = #{modifyuser,jdbcType=INTEGER},
+      Modifytime = #{modifytime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <!-- Select by project id -->
+  <select id="selectByProjectId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ControlHost
+    where  ProjectId = #{projectId,jdbcType=INTEGER}
+  </select>
+  
+  <!-- Select host list by some parameters -->
+  <select id="selectHostForList" parameterType="map" resultMap="listResultMap">
+	
+	 select c.id, c.ProjectId, c.Code, c.Createuser, c.Createtime, c.Modifyuser, c.Modifytime, p.Name as projectName from ControlHost as c inner join project as p on p.id = c.ProjectId
+	 <where>
+	 	<if test="projectId !=null and projectId != 0">
+		  	c.ProjectId = #{projectId}
+		</if>
+		<if test="userId != 1">
+		  	and p.id in (select up.ProjectId from UserProjectRel as up where up.UserId = #{userId})
+		</if>
+	 </where>
+	 
+	 order by 
+	 <choose>
+	 	<when test="sortField != null and sortField != ''">
+	 		c.${sortField}
+	 	</when>
+	 	<otherwise>
+	 		c.Createtime
+	 	</otherwise>
+	 </choose>
+	 
+	 <choose>
+	 	<when test="sortDirection != null and sortDirection != ''">
+	 		${sortDirection}
+	 	</when>
+	 	<otherwise>
+	 		desc
+	 	</otherwise>
+	 </choose>
+	</select>
+	
+	<select id="validHostCodeExceptById" resultType="boolean">
+		select exists (select Code from ControlHost
+		
+		<where>
+	 	 Code = #{code}
+		<if test="hostId != 0">
+    	  	AND id != #{hostId}
+      </if>  
+	 </where>
+	 )
+	</select>
+	
+	<select id="getHostAndProjectByHostId" resultType="map" parameterType="java.lang.Integer" >
+    select c.id, c.ProjectId as projectId, c.Code as code, c.Createuser as createuser, c.Createtime as createtime, 
+    c.Modifyuser as modifyuser, c.Modifytime as modifytime, p.Name as projectName 
+    from ControlHost as c inner join project as p on p.id = c.ProjectId
+    where c.id = #{hostId}
+  </select>
+  
+  <!-- 管理员查询主机数 -->
+  <select id="selectAllHostCounts" resultType="Integer" parameterType="Map">
+    select count(*)
+    from ControlHost
+    <if test="projectID != null and projectID != ''">
+    	where ProjectId = #{projectID}
+    </if>
+  </select>
+  
+  <!-- 管理员查询分页主机信息 -->
+  <select id="selectAllHostPages" resultMap="BaseResultMap" parameterType="Map">
+    select *
+    from ControlHost 
+    <if test="projectID != null and projectID != ''">
+    	where ProjectId = #{projectID}
+    </if>
+    order by createTime desc limit #{index,jdbcType=INTEGER} , #{pageSize,jdbcType=INTEGER}
+  </select>
+  
+</mapper>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rest.yun.mapping.EquipmentDataMapper" >
+  <resultMap id="BaseResultMap" type="com.rest.yun.beans.EquipmentData" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="SensorId" property="sensorid" jdbcType="INTEGER" />
+    <result column="Humidity" property="humidity" jdbcType="REAL" />
+    <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, SensorId, Humidity, CreateTime
+  </sql>
+  <!-- 根据传感器id查询最新的一条数据  -->
+  <select id="selectBySid" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from Equipment_Data
+    where SensorId = #{sId,jdbcType=INTEGER}
+    order by Createtime desc limit 1
+  </select>
+  <!-- 获取单个传感器当日的湿度值  -->
+  <select id="selectHumidityBySid" resultType="Float" parameterType="com.rest.yun.beans.EquipmentData" >
+    select IFNULL(AVG(Humidity),0) 
+    from Equipment_Data
+    where SensorId = #{sensorid,jdbcType=INTEGER}
+    and DATE_FORMAT(createTime,'%Y-%m-%d') =DATE_FORMAT(#{createtime,jdbcType=TIMESTAMP},'%Y-%m-%d')
+  </select>
+  <!-- 湿度详情  -->
+  <select id="selectHumidityList" resultMap="BaseResultMap" parameterType="com.rest.yun.beans.EquipmentData" >
+    select * 
+    from Equipment_Data
+    where SensorId = #{sensorid,jdbcType=INTEGER}
+    and DATE_FORMAT(createTime,'%Y-%m-%d') =DATE_FORMAT(#{createtime,jdbcType=TIMESTAMP},'%Y-%m-%d')
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from Equipment_Data
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <!-- 根据主机id删除其关联的所有节点数据信息 -->
+  <delete id="deleteAllByHid" parameterType="java.lang.Integer" >
+    delete ed from Equipment_Data ed 
+    left join SensorInfo s on ed.SensorId = s.id
+    left join equipment e on s.EquipmentId = e.id
+    left join ControlHost c on e.controlHostId = c.id
+    where c.id = #{controlHostId,jdbcType=INTEGER};
+  </delete>
+  <!-- 批量插入节点采集的数据 -->
+  <insert id="insert" parameterType="java.util.List" >
+  	<![CDATA[
+	  	insert into Equipment_Data (SensorId, Humidity, CreateTime)
+	    values
+	]]>
+	<foreach collection="list" item="item" index="index" separator="," >
+         (#{item.sensorid}, #{item.humidity}, #{item.createtime})
+	</foreach>
+  </insert>
+  <insert id="insertSelective" parameterType="com.rest.yun.beans.EquipmentData" >
+    insert into Equipment_Data
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="sensorid != null" >
+        SensorId,
+      </if>
+      <if test="humidity != null" >
+        Humidity,
+      </if>
+      <if test="createtime != null" >
+        CreateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="sensorid != null" >
+        #{sensorid,jdbcType=INTEGER},
+      </if>
+      <if test="humidity != null" >
+        #{humidity,jdbcType=REAL},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rest.yun.beans.EquipmentData" >
+    update Equipment_Data
+    <set >
+      <if test="sensorid != null" >
+        SensorId = #{sensorid,jdbcType=INTEGER},
+      </if>
+      <if test="humidity != null" >
+        Humidity = #{humidity,jdbcType=REAL},
+      </if>
+      <if test="createtime != null" >
+        CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rest.yun.beans.EquipmentData" >
+    update Equipment_Data
+    set SensorId = #{sensorid,jdbcType=INTEGER},
+      Humidity = #{humidity,jdbcType=REAL},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

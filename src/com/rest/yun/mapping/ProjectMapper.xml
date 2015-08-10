@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rest.yun.mapping.ProjectMapper">
+	<resultMap id="BaseResultMap" type="com.rest.yun.beans.Project">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="Name" property="name" jdbcType="VARCHAR" />
+		<result column="ProjectType" property="projecttype" jdbcType="INTEGER" />
+		<result column="Department" property="department" jdbcType="VARCHAR" />
+		<result column="Province" property="province" jdbcType="VARCHAR" />
+		<result column="City" property="city" jdbcType="VARCHAR" />
+		<result column="County" property="county" jdbcType="VARCHAR" />
+		<result column="Address" property="address" jdbcType="VARCHAR" />
+		<result column="Createuser" property="createuser" jdbcType="INTEGER" />
+		<result column="Createtime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="Modifyuser" property="modifyuser" jdbcType="INTEGER" />
+		<result column="Modifytime" property="modifytime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, Name, ProjectType, Department, Province, City, County, Address,
+		Createuser, Createtime,
+		Modifyuser, Modifytime
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from Project
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from Project
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.rest.yun.beans.Project">
+		insert into Project (id, Name, ProjectType,
+		Department, Province, City,
+		County, Address, Createuser,
+		Createtime, Modifyuser, Modifytime
+		)
+		values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+		#{projecttype,jdbcType=INTEGER},
+		#{department,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR},
+		#{county,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
+		#{createuser,jdbcType=INTEGER},
+		now(), #{modifyuser,jdbcType=INTEGER}, #{modifytime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<insert id="insertSelective" useGeneratedKeys="true"
+		keyProperty="id" parameterType="com.rest.yun.beans.Project">
+		insert into Project
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="name != null">
+				Name,
+			</if>
+			<if test="projecttype != null">
+				ProjectType,
+			</if>
+			<if test="department != null">
+				Department,
+			</if>
+			<if test="province != null">
+				Province,
+			</if>
+			<if test="city != null">
+				City,
+			</if>
+			<if test="county != null">
+				County,
+			</if>
+			<if test="address != null">
+				Address,
+			</if>
+			<if test="createuser != null">
+				Createuser,
+			</if>
+			<!-- <if test="createtime != null" > -->
+			Createtime,
+			<!-- </if> -->
+			<if test="modifyuser != null">
+				Modifyuser,
+			</if>
+			<if test="modifytime != null">
+				Modifytime,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="projecttype != null">
+				#{projecttype,jdbcType=INTEGER},
+			</if>
+			<if test="department != null">
+				#{department,jdbcType=VARCHAR},
+			</if>
+			<if test="province != null">
+				#{province,jdbcType=VARCHAR},
+			</if>
+			<if test="city != null">
+				#{city,jdbcType=VARCHAR},
+			</if>
+			<if test="county != null">
+				#{county,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="createuser != null">
+				#{createuser,jdbcType=INTEGER},
+			</if>
+			<!-- <if test="createtime != null" > -->
+			now(),
+			<!-- </if> -->
+			<if test="modifyuser != null">
+				#{modifyuser,jdbcType=INTEGER},
+			</if>
+			<if test="modifytime != null">
+				#{modifytime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.rest.yun.beans.Project">
+		update Project
+		<set>
+			<if test="name != null">
+				Name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="projecttype != null">
+				ProjectType = #{projecttype,jdbcType=INTEGER},
+			</if>
+			<if test="department != null">
+				Department = #{department,jdbcType=VARCHAR},
+			</if>
+			<if test="province != null">
+				Province = #{province,jdbcType=VARCHAR},
+			</if>
+			<if test="city != null">
+				City = #{city,jdbcType=VARCHAR},
+			</if>
+			<if test="county != null">
+				County = #{county,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				Address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="createuser != null">
+				Createuser = #{createuser,jdbcType=INTEGER},
+			</if>
+			<if test="createtime != null">
+				Createtime = #{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyuser != null">
+				Modifyuser = #{modifyuser,jdbcType=INTEGER},
+			</if>
+			<if test="modifytime != null">
+				Modifytime = #{modifytime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.rest.yun.beans.Project">
+		update Project
+		set Name = #{name,jdbcType=VARCHAR},
+		ProjectType = #{projecttype,jdbcType=INTEGER},
+		Department = #{department,jdbcType=VARCHAR},
+		Province = #{province,jdbcType=VARCHAR},
+		City = #{city,jdbcType=VARCHAR},
+		County = #{county,jdbcType=VARCHAR},
+		Address = #{address,jdbcType=VARCHAR},
+		Createuser = #{createuser,jdbcType=INTEGER},
+		Createtime = #{createtime,jdbcType=TIMESTAMP},
+		Modifyuser = #{modifyuser,jdbcType=INTEGER},
+		Modifytime = #{modifytime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- Select projects by some parameters -->
+	<select id="selectProjectForList" parameterType="map" resultMap="BaseResultMap">
+
+		select
+		<include refid="Base_Column_List" />
+		from Project
+		<where>
+			<if test="projectName != null and projectName != ''">
+				Name = #{projectName}
+			</if>
+			<if test="province !=null and province != ''">
+				AND Province = #{province}
+			</if>
+			<if test="city !=null and city != ''">
+				AND City = #{city}
+			</if>
+			<if test="userId !=null and userId != '' and userId != 1 ">
+				AND id in (select ProjectId from UserProjectRel where UserId = #{userId})
+			</if>
+		</where>
+		
+		order by
+		<choose>
+			<when test="sortField != null and sortField != ''">
+				${sortField}
+			</when>
+			<otherwise>
+				Createtime
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when test="sortDirection != null and sortDirection != ''">
+				${sortDirection}
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="validProjectName" resultType="boolean">
+		select exists (select Name from project
+
+		<where>
+			Name = #{name}
+			<if test="projectId != 0">
+				AND id != #{projectId}
+			</if>
+		</where>
+		)
+	</select>
+
+
+	<!-- getAllProjectName -->
+	<select id="getAllProjectName" resultType="map">
+		select id, Name as name from Project
+		<where>
+			<if test="userId != 1 ">
+				id in (select ProjectId from UserProjectRel where UserId = #{userId})
+			</if>
+		</where>
+	</select>
+</mapper>

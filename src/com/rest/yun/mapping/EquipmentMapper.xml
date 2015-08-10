@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rest.yun.mapping.EquipmentMapper" >
+  <resultMap id="BaseResultMap" type="com.rest.yun.beans.Equipment" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="Name" property="name" jdbcType="VARCHAR" />
+    <result column="ControlHostId" property="controlhostid" jdbcType="INTEGER" />
+    <result column="Code" property="code" jdbcType="VARCHAR" />
+    <result column="IrrigationType" property="irrigationtype" jdbcType="INTEGER" />
+    <result column="SoilWeight" property="soilweight" jdbcType="REAL" />
+    <result column="SoilWater" property="soilwater" jdbcType="REAL" />
+    <result column="Area" property="area" jdbcType="DOUBLE" />
+    <result column="PlantsName" property="plantsname" jdbcType="INTEGER" />
+    <result column="soilName" property="soilname" jdbcType="INTEGER" />
+    <result column="RootDepth" property="rootdepth" jdbcType="INTEGER" />
+    <result column="HumidityUp" property="humidityup" jdbcType="REAL" />
+    <result column="HumidityDown" property="humiditydown" jdbcType="REAL" />
+    <result column="TemperatureUp" property="temperatureup" jdbcType="REAL" />
+    <result column="TemperatureDown" property="temperaturedown" jdbcType="REAL" />
+    <result column="Week" property="week" jdbcType="VARCHAR" />
+    <result column="TimeOneStart" property="timeonestart" jdbcType="VARCHAR" />
+    <result column="TimeOneEnd" property="timeoneend" jdbcType="VARCHAR" />
+    <result column="TimeTwoStart" property="timetwostart" jdbcType="VARCHAR" />
+    <result column="TimeTwoEnd" property="timetwoend" jdbcType="VARCHAR" />
+    <result column="TimeThreeStart" property="timethreestart" jdbcType="VARCHAR" />
+    <result column="TimeThreeEnd" property="timethreeend" jdbcType="VARCHAR" />
+    <result column="FowParameter" property="fowparameter" jdbcType="INTEGER" />
+    <result column="Createuser" property="createuser" jdbcType="INTEGER" />
+    <result column="Createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="Modifyuser" property="modifyuser" jdbcType="INTEGER" />
+    <result column="Modifytime" property="modifytime" jdbcType="TIMESTAMP" />
+    
+    <association property="project" column="controlHostId" select="selectProjectByHostId"></association>
+    <association property="plantsInfo" column="PlantsName" select="selectPlantsById"></association>
+    <association property="soilInfo" column="soilName" select="selectSoilById"></association>
+  </resultMap>
+  
+  <!-- 映射关联项目 -->
+  <resultMap id="projectMap" type="com.rest.yun.beans.Project" >
+  	<id column="id" property="id" jdbcType="INTEGER" />
+    <result column="Name" property="name" jdbcType="VARCHAR" />
+    <result column="ProjectType" property="projecttype" jdbcType="INTEGER" />
+    <result column="Department" property="department" jdbcType="VARCHAR" />
+    <result column="Province" property="province" jdbcType="VARCHAR" />
+    <result column="City" property="city" jdbcType="VARCHAR" />
+    <result column="County" property="county" jdbcType="VARCHAR" />
+    <result column="Address" property="address" jdbcType="VARCHAR" />
+    <result column="Createuser" property="createuser" jdbcType="INTEGER" />
+    <result column="Createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="Modifyuser" property="modifyuser" jdbcType="INTEGER" />
+    <result column="Modifytime" property="modifytime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <!-- 映射关联植物 -->
+  <resultMap id="plantsMap" type="com.rest.yun.beans.PlantsInfo" >
+  	<id column="id" property="id" jdbcType="INTEGER" />
+    <result column="PlantsName" property="plantsname" jdbcType="VARCHAR" />
+    <result column="RootDepth" property="rootdepth" jdbcType="INTEGER" />
+    <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="CreateUser" property="createuser" jdbcType="INTEGER" />
+    <result column="ModifyTime" property="modifytime" jdbcType="TIMESTAMP" />
+    <result column="ModifyUser" property="modifyuser" jdbcType="INTEGER" />
+  </resultMap>
+  <!-- 映射关联植物 -->
+  <resultMap id="soilMap" type="com.rest.yun.beans.SoilInfo" >
+  	<id column="id" property="id" jdbcType="INTEGER" />
+    <result column="SoilType" property="soiltype" jdbcType="VARCHAR" />
+    <result column="SoilWeight" property="soilweight" jdbcType="REAL" />
+    <result column="SoilWater" property="soilwater" jdbcType="REAL" />
+    <result column="ParameterA" property="parametera" jdbcType="REAL" />
+    <result column="ParameterB" property="parameterb" jdbcType="REAL" />
+    <result column="ParameterC" property="parameterc" jdbcType="REAL" />
+    <result column="ParameterD" property="parameterd" jdbcType="REAL" />
+    <result column="Province" property="province" jdbcType="VARCHAR" />
+    <result column="City" property="city" jdbcType="VARCHAR" />
+    <result column="County" property="county" jdbcType="VARCHAR" />
+    <result column="Address" property="address" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="CreateUser" property="createuser" jdbcType="INTEGER" />
+    <result column="ModifyTime" property="modifytime" jdbcType="TIMESTAMP" />
+    <result column="ModifyUser" property="modifyuser" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, Name, ControlHostId, Code, IrrigationType, SoilWeight, SoilWater, Area, PlantsName,soilName 
+    RootDepth, HumidityUp, HumidityDown, TemperatureUp, TemperatureDown, Week, TimeOneStart, 
+    TimeOneEnd, TimeTwoStart, TimeTwoEnd, TimeThreeStart, TimeThreeEnd, FowParameter, 
+    Createuser, Createtime, Modifyuser, Modifytime
+  </sql>
+  <!-- 查询关联项目 -->
+  <select id="selectProjectByHostId" resultMap="projectMap">
+  	select project.* from Project 
+  	left join ControlHost on project.id = ControlHost.projectId
+  	where ControlHost.id = #{controlHostId}
+  </select>
+  <!-- 查询关联植物信息 -->
+  <select id="selectPlantsById" resultMap="plantsMap">
+  	select PlantsInfo.* from PlantsInfo 
+  	where PlantsInfo.id = #{PlantsName}
+  </select>
+  <!-- 查询关联土壤信息 -->
+  <select id="selectSoilById" resultMap="soilMap">
+  	select SoilInfo.* from SoilInfo 
+  	where SoilInfo.id = #{soilName}
+  </select>
+  <!-- 根据项目id查询节点 -->
+  <select id="selectByPid" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select e.*
+    from Equipment e
+    left join ControlHost c on e.ControlHostId = c.id
+    where c.projectId = #{pId,jdbcType=INTEGER}
+  </select>
+  <!-- 根据Hcode和Ecode查询节点  -->
+  <select id="selectEquipmentByHcodeAndEcode" resultMap="BaseResultMap" parameterType="Map" >
+    select e.*
+    from Equipment e left join ControlHost c on e.ControlHostId = c.id
+    where e.Code=#{eCode} 
+     and c.Code = #{hCode}
+  </select>
+  <!-- 根据多个节点id查询节点信息  -->
+  <select id="selectByIdStr" resultMap="BaseResultMap" parameterType="Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from Equipment 
+    where id in
+    <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+  		#{item}  
+ 	</foreach>  
+  </select>
+  <!-- 分页查询节点数据  -->
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="Map" >
+    select e.*
+    from Equipment e
+    left join ControlHost c on e.ControlHostId=c.id
+    left join Project p on c.projectId = p.id
+    <where>
+	 	<if test="pId != null and pId != ''">
+		  	p.id = #{pId}
+		</if>
+		<if test="userId != 1">
+		  	and p.id in (select up.ProjectId from UserProjectRel as up where up.UserId = #{userId})
+		</if>
+	 </where>
+	 
+	 order by 
+	 <choose>
+	 	<when test="sortField != null and sortField != ''">
+	 		${sortField}
+	 	</when>
+	 	<otherwise>
+	 		Createtime
+	 	</otherwise>
+	 </choose>
+	 
+	 <choose>
+	 	<when test="sortDirection != null and sortDirection != ''">
+	 		${sortDirection}
+	 	</when>
+	 	<otherwise>
+	 		desc
+	 	</otherwise>
+	 </choose>
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from Equipment
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <!-- 删除主机下所有节点及其相关联数据 -->
+  <delete id="deleteAllByHid" parameterType="java.lang.Integer" >
+    delete e from Equipment e
+	left join ControlHost c on e.controlHostId = c.id
+    where c.id = #{id,jdbcType=INTEGER};
+  </delete>
+  <insert id="insert" parameterType="com.rest.yun.beans.Equipment" >
+    insert into Equipment (id, Name, ControlHostId, 
+      Code, IrrigationType, SoilWeight, 
+      SoilWater, Area, PlantsName,soilName 
+      RootDepth, HumidityUp, HumidityDown, 
+      TemperatureUp, TemperatureDown, Week, 
+      TimeOneStart, TimeOneEnd, TimeTwoStart, 
+      TimeTwoEnd, TimeThreeStart, TimeThreeEnd, 
+      FowParameter, Createuser, Createtime, 
+      Modifyuser, Modifytime)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{controlhostid,jdbcType=INTEGER}, 
+      #{code,jdbcType=VARCHAR}, #{irrigationtype,jdbcType=INTEGER}, #{soilweight,jdbcType=REAL}, 
+      #{soilwater,jdbcType=REAL}, #{area,jdbcType=DOUBLE}, #{soilname,jdbcType=INTEGER}, #{plantsname,jdbcType=INTEGER}, 
+      #{rootdepth,jdbcType=INTEGER}, #{humidityup,jdbcType=REAL}, #{humiditydown,jdbcType=REAL}, 
+      #{temperatureup,jdbcType=REAL}, #{temperaturedown,jdbcType=REAL}, #{week,jdbcType=VARCHAR}, 
+      #{timeonestart,jdbcType=VARCHAR}, #{timeoneend,jdbcType=VARCHAR}, #{timetwostart,jdbcType=VARCHAR}, 
+      #{timetwoend,jdbcType=VARCHAR}, #{timethreestart,jdbcType=VARCHAR}, #{timethreeend,jdbcType=VARCHAR}, 
+      #{fowparameter,jdbcType=INTEGER}, #{createuser,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{modifyuser,jdbcType=INTEGER}, #{modifytime,jdbcType=TIMESTAMP})
+  </insert>
+  <!-- 节点注册 -->
+  <insert id="save" useGeneratedKeys="true" keyProperty="id" parameterType="com.rest.yun.beans.Equipment" >
+    insert into Equipment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        Name,
+      </if>
+      <if test="controlhostid != null" >
+        ControlHostId,
+      </if>
+      <if test="code != null" >
+        Code,
+      </if>
+      <if test="irrigationtype != null" >
+        IrrigationType,
+      </if>
+      <if test="soilweight != null" >
+        SoilWeight,
+      </if>
+      <if test="soilwater != null" >
+        SoilWater,
+      </if>
+      <if test="area != null" >
+        Area,
+      </if>
+      <if test="plantsname != null" >
+        PlantsName,
+      </if>
+      <if test="soilname != null" >
+        soilName,
+      </if>
+      <if test="rootdepth != null" >
+        RootDepth,
+      </if>
+      <if test="humidityup != null" >
+        HumidityUp,
+      </if>
+      <if test="humiditydown != null" >
+        HumidityDown,
+      </if>
+      <if test="temperatureup != null" >
+        TemperatureUp,
+      </if>
+      <if test="temperaturedown != null" >
+        TemperatureDown,
+      </if>
+      <if test="week != null" >
+        Week,
+      </if>
+      <if test="timeonestart != null" >
+        TimeOneStart,
+      </if>
+      <if test="timeoneend != null" >
+        TimeOneEnd,
+      </if>
+      <if test="timetwostart != null" >
+        TimeTwoStart,
+      </if>
+      <if test="timetwoend != null" >
+        TimeTwoEnd,
+      </if>
+      <if test="timethreestart != null" >
+        TimeThreeStart,
+      </if>
+      <if test="timethreeend != null" >
+        TimeThreeEnd,
+      </if>
+      <if test="fowparameter != null" >
+        FowParameter,
+      </if>
+      <if test="createuser != null" >
+        Createuser,
+      </if>
+      <if test="createtime != null" >
+        Createtime,
+      </if>
+      <if test="modifyuser != null" >
+        Modifyuser,
+      </if>
+      <if test="modifytime != null" >
+        Modifytime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="controlhostid != null" >
+        #{controlhostid,jdbcType=INTEGER},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="irrigationtype != null" >
+        #{irrigationtype,jdbcType=INTEGER},
+      </if>
+      <if test="soilweight != null" >
+        #{soilweight,jdbcType=REAL},
+      </if>
+      <if test="soilwater != null" >
+        #{soilwater,jdbcType=REAL},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=DOUBLE},
+      </if>
+      <if test="plantsname != null" >
+        #{plantsname,jdbcType=INTEGER},
+      </if>
+      <if test="soilname != null" >
+        #{soilname,jdbcType=INTEGER},
+      </if>
+      <if test="rootdepth != null" >
+        #{rootdepth,jdbcType=INTEGER},
+      </if>
+      <if test="humidityup != null" >
+        #{humidityup,jdbcType=REAL},
+      </if>
+      <if test="humiditydown != null" >
+        #{humiditydown,jdbcType=REAL},
+      </if>
+      <if test="temperatureup != null" >
+        #{temperatureup,jdbcType=REAL},
+      </if>
+      <if test="temperaturedown != null" >
+        #{temperaturedown,jdbcType=REAL},
+      </if>
+      <if test="week != null" >
+        #{week,jdbcType=VARCHAR},
+      </if>
+      <if test="timeonestart != null" >
+        #{timeonestart,jdbcType=VARCHAR},
+      </if>
+      <if test="timeoneend != null" >
+        #{timeoneend,jdbcType=VARCHAR},
+      </if>
+      <if test="timetwostart != null" >
+        #{timetwostart,jdbcType=VARCHAR},
+      </if>
+      <if test="timetwoend != null" >
+        #{timetwoend,jdbcType=VARCHAR},
+      </if>
+      <if test="timethreestart != null" >
+        #{timethreestart,jdbcType=VARCHAR},
+      </if>
+      <if test="timethreeend != null" >
+        #{timethreeend,jdbcType=VARCHAR},
+      </if>
+      <if test="fowparameter != null" >
+        #{fowparameter,jdbcType=INTEGER},
+      </if>
+      <if test="createuser != null" >
+        #{createuser,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyuser != null" >
+        #{modifyuser,jdbcType=INTEGER},
+      </if>
+      <if test="modifytime != null" >
+        #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <!-- 更新节点信息 -->
+  <update id="updateByPrimaryKeySelective" parameterType="com.rest.yun.beans.Equipment" >
+    update Equipment
+    <set >
+      <if test="name != null" >
+        Name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="controlhostid != null" >
+        ControlHostId = #{controlhostid,jdbcType=INTEGER},
+      </if>
+      <if test="code != null" >
+        Code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="irrigationtype != null" >
+        IrrigationType = #{irrigationtype,jdbcType=INTEGER},
+      </if>
+      <if test="soilweight != null" >
+        SoilWeight = #{soilweight,jdbcType=REAL},
+      </if>
+      <if test="soilwater != null" >
+        SoilWater = #{soilwater,jdbcType=REAL},
+      </if>
+      <if test="area != null" >
+        Area = #{area,jdbcType=DOUBLE},
+      </if>
+      <if test="plantsname != null" >
+        PlantsName = #{plantsname,jdbcType=INTEGER},
+      </if>
+      <if test="soilname != null" >
+        soilName = #{soilname,jdbcType=INTEGER},
+      </if>
+      <if test="rootdepth != null" >
+        RootDepth = #{rootdepth,jdbcType=INTEGER},
+      </if>
+      <if test="humidityup != null" >
+        HumidityUp = #{humidityup,jdbcType=REAL},
+      </if>
+      <if test="humiditydown != null" >
+        HumidityDown = #{humiditydown,jdbcType=REAL},
+      </if>
+      <if test="temperatureup != null" >
+        TemperatureUp = #{temperatureup,jdbcType=REAL},
+      </if>
+      <if test="temperaturedown != null" >
+        TemperatureDown = #{temperaturedown,jdbcType=REAL},
+      </if>
+      <if test="week != null" >
+        Week = #{week,jdbcType=VARCHAR},
+      </if>
+      <if test="timeonestart != null" >
+        TimeOneStart = #{timeonestart,jdbcType=VARCHAR},
+      </if>
+      <if test="timeoneend != null" >
+        TimeOneEnd = #{timeoneend,jdbcType=VARCHAR},
+      </if>
+      <if test="timetwostart != null" >
+        TimeTwoStart = #{timetwostart,jdbcType=VARCHAR},
+      </if>
+      <if test="timetwoend != null" >
+        TimeTwoEnd = #{timetwoend,jdbcType=VARCHAR},
+      </if>
+      <if test="timethreestart != null" >
+        TimeThreeStart = #{timethreestart,jdbcType=VARCHAR},
+      </if>
+      <if test="timethreeend != null" >
+        TimeThreeEnd = #{timethreeend,jdbcType=VARCHAR},
+      </if>
+      <if test="fowparameter != null" >
+        FowParameter = #{fowparameter,jdbcType=INTEGER},
+      </if>
+      <if test="createuser != null" >
+        Createuser = #{createuser,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        Createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyuser != null" >
+        Modifyuser = #{modifyuser,jdbcType=INTEGER},
+      </if>
+      <if test="modifytime != null" >
+        Modifytime = #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rest.yun.beans.Equipment" >
+    update Equipment
+    set Name = #{name,jdbcType=VARCHAR},
+      ControlHostId = #{controlhostid,jdbcType=INTEGER},
+      Code = #{code,jdbcType=VARCHAR},
+      IrrigationType = #{irrigationtype,jdbcType=INTEGER},
+      SoilWeight = #{soilweight,jdbcType=REAL},
+      SoilWater = #{soilwater,jdbcType=REAL},
+      Area = #{area,jdbcType=DOUBLE},
+      PlantsName = #{plantsname,jdbcType=INTEGER},
+      soilName = #{soilname,jdbcType=INTEGER},
+      RootDepth = #{rootdepth,jdbcType=INTEGER},
+      HumidityUp = #{humidityup,jdbcType=REAL},
+      HumidityDown = #{humiditydown,jdbcType=REAL},
+      TemperatureUp = #{temperatureup,jdbcType=REAL},
+      TemperatureDown = #{temperaturedown,jdbcType=REAL},
+      Week = #{week,jdbcType=VARCHAR},
+      TimeOneStart = #{timeonestart,jdbcType=VARCHAR},
+      TimeOneEnd = #{timeoneend,jdbcType=VARCHAR},
+      TimeTwoStart = #{timetwostart,jdbcType=VARCHAR},
+      TimeTwoEnd = #{timetwoend,jdbcType=VARCHAR},
+      TimeThreeStart = #{timethreestart,jdbcType=VARCHAR},
+      TimeThreeEnd = #{timethreeend,jdbcType=VARCHAR},
+      FowParameter = #{fowparameter,jdbcType=INTEGER},
+      Createuser = #{createuser,jdbcType=INTEGER},
+      Createtime = #{createtime,jdbcType=TIMESTAMP},
+      Modifyuser = #{modifyuser,jdbcType=INTEGER},
+      Modifytime = #{modifytime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!-- 设置多节点模式 -->
+  <update id="setListModel" parameterType="java.util.List" >
+	<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+		update Equipment
+		<set>
+			IrrigationType = #{item.irrigationtype},
+			Modifyuser = #{item.modifyuser},
+			Modifytime = #{item.modifytime}
+		</set>
+		where id = #{item.id}
+	</foreach>  
+  </update>
+  <!-- 设置多节点自控参数 -->
+  <update id="setAutoParam" parameterType="java.util.List" >
+	<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+		update Equipment
+		<set>
+			  SoilWeight = #{item.soilweight,jdbcType=REAL},
+		      SoilWater = #{item.soilwater,jdbcType=REAL},
+		      PlantsName = #{item.plantsname,jdbcType=INTEGER},
+		      soilName = #{item.soilname,jdbcType=INTEGER},
+		      RootDepth = #{item.rootdepth,jdbcType=INTEGER},
+		      HumidityUp = #{item.humidityup,jdbcType=REAL},
+		      HumidityDown = #{item.humiditydown,jdbcType=REAL},
+		      TemperatureUp = #{item.temperatureup,jdbcType=REAL},
+		      TemperatureDown = #{item.temperaturedown,jdbcType=REAL},
+			  Modifyuser = #{item.modifyuser},
+			  Modifytime = #{item.modifytime}
+		</set>
+		where id = #{item.id}
+	</foreach>  
+  </update>
+  <!-- 设置多节点时段 -->
+  <update id="setTimeLen" parameterType="java.util.List" >
+	<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+		update Equipment
+		<set>
+			  Week = #{item.week,jdbcType=VARCHAR},
+		      TimeOneStart = #{item.timeonestart,jdbcType=VARCHAR},
+		      TimeOneEnd = #{item.timeoneend,jdbcType=VARCHAR},
+		      TimeTwoStart = #{item.timetwostart,jdbcType=VARCHAR},
+		      TimeTwoEnd = #{item.timetwoend,jdbcType=VARCHAR},
+		      TimeThreeStart = #{item.timethreestart,jdbcType=VARCHAR},
+		      TimeThreeEnd = #{item.timethreeend,jdbcType=VARCHAR},
+			  Modifyuser = #{item.modifyuser},
+			  Modifytime = #{item.modifytime}
+		</set>
+		where id = #{item.id}
+	</foreach>  
+  </update>
+  
+  <!-- Select equipment by some parameters -->
+  <select id="selectEqtForList" parameterType="map" resultMap="BaseResultMap">
+	
+	 select e.* from Equipment e left join Controlhost c on c.id = e.ControlHostId
+	 
+     <where>
+	 	<if test="projectId !=null and projectId != 0">
+		  	c.ProjectId = #{projectId}
+		</if>
+		<if test="userId != 1">
+		  	and c.ProjectId in (select up.ProjectId from UserProjectRel as up where up.UserId = #{userId})
+		</if>
+	 </where>
+	 
+	 order by 
+	 <choose>
+	 	<when test="sortField != null and sortField != ''">
+	 		${sortField}
+	 	</when>
+	 	<otherwise>
+	 		Createtime
+	 	</otherwise>
+	 </choose>
+	 
+	 <choose>
+	 	<when test="sortDirection != null and sortDirection != ''">
+	 		${sortDirection}
+	 	</when>
+	 	<otherwise>
+	 		desc
+	 	</otherwise>
+	 </choose>
+	</select>
+	
+	 <!-- 根据节点id查询 -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select e.*
+    from Equipment e
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+</mapper>

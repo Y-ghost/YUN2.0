@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rest.yun.mapping.UserProjectRelMapper" >
+  <resultMap id="BaseResultMap" type="com.rest.yun.beans.UserProjectRel" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="UserId" property="userid" jdbcType="INTEGER" />
+    <result column="ProjectId" property="projectid" jdbcType="INTEGER" />
+    <result column="Createuser" property="createuser" jdbcType="INTEGER" />
+    <result column="Createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="Modifyuser" property="modifyuser" jdbcType="INTEGER" />
+    <result column="Modifytime" property="modifytime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, UserId, ProjectId, Createuser, Createtime, Modifyuser, Modifytime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from UserProjectRel
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <!-- 根据项目id查询关联关系 -->
+  <select id="selectRelByPid" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from UserProjectRel
+    where ProjectId = #{pId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from UserProjectRel
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.rest.yun.beans.UserProjectRel" >
+    insert into UserProjectRel (id, UserId, ProjectId, 
+      Createuser, Createtime, Modifyuser, 
+      Modifytime)
+    values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{projectid,jdbcType=INTEGER}, 
+      #{createuser,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{modifyuser,jdbcType=INTEGER}, 
+      #{modifytime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rest.yun.beans.UserProjectRel" >
+    insert into UserProjectRel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userid != null" >
+        UserId,
+      </if>
+      <if test="projectid != null" >
+        ProjectId,
+      </if>
+      <if test="createuser != null" >
+        Createuser,
+      </if>
+      <if test="createtime != null" >
+        Createtime,
+      </if>
+      <if test="modifyuser != null" >
+        Modifyuser,
+      </if>
+      <if test="modifytime != null" >
+        Modifytime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="projectid != null" >
+        #{projectid,jdbcType=INTEGER},
+      </if>
+      <if test="createuser != null" >
+        #{createuser,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyuser != null" >
+        #{modifyuser,jdbcType=INTEGER},
+      </if>
+      <if test="modifytime != null" >
+        #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rest.yun.beans.UserProjectRel" >
+    update UserProjectRel
+    <set >
+      <if test="userid != null" >
+        UserId = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="projectid != null" >
+        ProjectId = #{projectid,jdbcType=INTEGER},
+      </if>
+      <if test="createuser != null" >
+        Createuser = #{createuser,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        Createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyuser != null" >
+        Modifyuser = #{modifyuser,jdbcType=INTEGER},
+      </if>
+      <if test="modifytime != null" >
+        Modifytime = #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rest.yun.beans.UserProjectRel" >
+    update UserProjectRel
+    set UserId = #{userid,jdbcType=INTEGER},
+      ProjectId = #{projectid,jdbcType=INTEGER},
+      Createuser = #{createuser,jdbcType=INTEGER},
+      Createtime = #{createtime,jdbcType=TIMESTAMP},
+      Modifyuser = #{modifyuser,jdbcType=INTEGER},
+      Modifytime = #{modifytime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

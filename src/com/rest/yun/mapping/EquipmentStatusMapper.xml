@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rest.yun.mapping.EquipmentStatusMapper" >
+  <resultMap id="BaseResultMap" type="com.rest.yun.beans.EquipmentStatus" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="EquipmentId" property="equipmentid" jdbcType="INTEGER" />
+    <result column="Temperature" property="temperature" jdbcType="REAL" />
+    <result column="WaterValue" property="watervalue" jdbcType="DECIMAL" />
+    <result column="CurrentValue" property="currentvalue" jdbcType="DECIMAL" />
+    <result column="Velocity" property="velocity" jdbcType="REAL" />
+    <result column="Status" property="status" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, EquipmentId, Temperature, WaterValue, CurrentValue,Velocity, Status, CreateTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from Equipment_Status
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+   <!-- 根据节点id查询节点采集的数据 -->
+  <select id="selectEquipmentStatusByEid" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  	select 
+    <include refid="Base_Column_List" />
+    from Equipment_Status
+    where EquipmentId = #{eId,jdbcType=INTEGER}
+  	order by createTime desc limit 1
+  </select>
+   <!-- 查询单独一个节点一天总的灌水量 -->
+  <select id="selectEquipmentStatusByEidDate" resultType="Long" parameterType="com.rest.yun.beans.EquipmentStatus" >
+  	select IFNULL(sum(CurrentValue),0)
+    from Equipment_Status
+    where EquipmentId = #{equipmentid,jdbcType=INTEGER}
+  	and DATE_FORMAT(createTime,'%Y-%m-%d') =DATE_FORMAT(#{createtime,jdbcType=TIMESTAMP},'%Y-%m-%d')
+  </select>
+   <!-- 统计用水量详情 -->
+  <select id="selectEquipmentStatusList" resultMap="BaseResultMap" parameterType="com.rest.yun.beans.EquipmentStatus" >
+  	select *
+    from Equipment_Status
+    where EquipmentId = #{equipmentid,jdbcType=INTEGER}
+  	and DATE_FORMAT(createTime,'%Y-%m-%d') =DATE_FORMAT(#{createtime,jdbcType=TIMESTAMP},'%Y-%m-%d')
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from Equipment_Status
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <!-- 删除主机下所有节点及其相关联数据 -->
+  <delete id="deleteAllByHid" parameterType="java.lang.Integer" >
+    delete es from Equipment_Status es
+    left join equipment e on es.EquipmentId = e.id
+    left join ControlHost c on e.controlHostId = c.id
+    where c.id = #{controlHostId,jdbcType=INTEGER};
+  </delete>
+  <!-- 批量插入节点采集的数据 -->
+  <insert id="insert" parameterType="java.util.List" >
+  	<![CDATA[
+	  	insert into Equipment_Status (EquipmentId, Temperature, WaterValue,CurrentValue, Velocity, Status, CreateTime)
+	    values
+	]]>
+	<foreach collection="list" item="item" index="index" separator="," >
+         (#{item.equipmentid}, #{item.temperature}, #{item.watervalue},#{item.currentvalue},  #{item.velocity}, #{item.status}, #{item.createtime})
+	</foreach>
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.rest.yun.beans.EquipmentStatus" >
+    insert into Equipment_Status
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="equipmentid != null" >
+        EquipmentId,
+      </if>
+      <if test="temperature != null" >
+        Temperature,
+      </if>
+      <if test="watervalue != null" >
+        WaterValue,
+      </if>
+      <if test="currentvalue != null" >
+        CurrentValue,
+      </if>
+      <if test="velocity != null" >
+        Velocity,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="createtime != null" >
+        CreateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="equipmentid != null" >
+        #{equipmentid,jdbcType=INTEGER},
+      </if>
+      <if test="temperature != null" >
+        #{temperature,jdbcType=REAL},
+      </if>
+      <if test="watervalue != null" >
+        #{watervalue,jdbcType=DECIMAL},
+      </if>
+      <if test="currentvalue != null" >
+        #{currentvalue,jdbcType=DECIMAL},
+      </if>
+      <if test="velocity != null" >
+        #{velocity,jdbcType=REAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rest.yun.beans.EquipmentStatus" >
+    update Equipment_Status
+    <set >
+      <if test="equipmentid != null" >
+        EquipmentId = #{equipmentid,jdbcType=INTEGER},
+      </if>
+      <if test="temperature != null" >
+        Temperature = #{temperature,jdbcType=REAL},
+      </if>
+      <if test="watervalue != null" >
+        WaterValue = #{watervalue,jdbcType=DECIMAL},
+      </if>
+      <if test="currentvalue != null" >
+        CurrentValue = #{currentvalue,jdbcType=DECIMAL},
+      </if>
+      <if test="velocity != null" >
+        Velocity = #{velocity,jdbcType=REAL},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rest.yun.beans.EquipmentStatus" >
+    update Equipment_Status
+    set EquipmentId = #{equipmentid,jdbcType=INTEGER},
+      Temperature = #{temperature,jdbcType=REAL},
+      WaterValue = #{watervalue,jdbcType=DECIMAL},
+      CurrentValue = #{currentvalue,jdbcType=DECIMAL},
+      Velocity = #{velocity,jdbcType=REAL},
+      Status = #{status,jdbcType=VARCHAR},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

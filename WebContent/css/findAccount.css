@@ -1,0 +1,174 @@
+.form-signin {
+	width: 500px;
+	margin: 30px auto;
+}
+
+.form-signin div {
+	padding: 5px 15px 0px 15px;
+}
+
+#headLine {
+	display: none;
+}
+
+.input-group-lg>.form-control {
+	font-size: 16px;
+}
+
+h3 {
+	color: #666666;
+}
+
+.input-group-container .form-control-feedback {
+	top: 15px !important;
+	right: 30px !important;
+}
+
+.input-group-container .help-block {
+	padding: 0 15px;
+}
+
+.footer{
+	margin-top:10%;
+}
+#passport-title h2 {
+	font-size: 28px;
+	padding-left: 30px;
+	line-height: 50px;
+	font-family: 'ºÚÌå';
+	font-weight: 700;
+}
+
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code,
+	form, fieldset, legend, input, textarea, p, blockquote, th, td, img {
+	margin: 0;
+	padding: 0;
+}
+
+h2 {
+	display: block;
+	font-size: 1.5em;
+	-webkit-margin-before: 0.83em;
+	-webkit-margin-after: 0.83em;
+	-webkit-margin-start: 0px;
+	-webkit-margin-end: 0px;
+	font-weight: bold;
+}
+
+.wrap {
+	width: 960px;
+	margin: 0 auto;
+}
+
+.passport-progress {
+	margin-bottom: 20px;
+}
+
+.passport-progress {
+	width: 900px;
+	margin: 0 auto;
+	font-family: 'Microsoft YaHei';
+}
+
+.passport-progress ul li.current {
+	background-color: #1b926c;
+	color: #fff;
+}
+
+.passport-progress ul li {
+	width: 300px;
+	background-color: #e4e4e4;
+	text-align: center;
+	font-size: 14px;
+	line-height: 31px;
+	float: left;
+	position: relative;
+}
+
+.passport-progress ul {
+	border-radius: 5px;
+	overflow: hidden;
+}
+
+ul {
+	list-style: none;
+}
+
+li {
+	list-style: none;
+}
+
+.passport-progress ul li em {
+	position: absolute;
+	left: -16px;
+	top: 0;
+	width: 32px;
+	height: 31px;
+	background: url(../images/arrow_progress.png)
+		no-repeat;
+}
+
+.input-text-v3-normal {
+	font-size: 14px;
+	height: 30px;
+	line-height: 30px;
+}
+
+.input-text-v3 {
+	border-radius: 3px;
+	border-top: 1px solid #999;
+	border-left: 1px solid #a2a2a2;
+	border-right: 1px solid #a9a9a9;
+	border-bottom: 1px solid #b2b2b2;
+	padding: 0 .5em;
+	color: #000;
+	font-family: 'Microsoft YaHei';
+	background-color: #fefefe;
+	vertical-align: middle;
+	outline: 0;
+}
+
+.btn {
+	font-family: "Microsoft YaHei";
+	vertical-align: middle;
+	display: inline-block;
+	font-size: 14px;
+	line-height: 28px !important;
+	height: 28px;
+	padding: 0 14px;
+	border-radius: 5px;
+	box-shadow: 1px 1px 1px #ccc;
+	border-style: solid;
+	border-width: 1px;
+	cursor: pointer;
+	width:100px;
+}
+
+.code {
+	float: left;
+	margin-right: 10px;
+	text-align: center;
+	height: 40px;
+	line-height: 30px;
+	width: 140px;
+	font-size:20px;
+	background-color: #e4e4e4;
+	font-family: Arial;
+	font-style: italic;
+	color: Red;
+	letter-spacing: 4px;
+	font-weight: 700;
+}
+.codeBtn {
+	float: left;
+	color: #1b926c;
+	font-weight: 700;
+	text-align: center;
+	height: 40px;
+	padding-top: 15px;
+	width: 140px;
+}
+
+
+
+

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rest.yun.mapping.DataTempMapper" >
+  <resultMap id="BaseResultMap" type="com.rest.yun.beans.DataTemp" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="ContralType" property="contraltype" jdbcType="VARCHAR" />
+    <result column="DataContext" property="datacontext" jdbcType="VARCHAR" />
+    <result column="ReceiveTime" property="receivetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, code, ContralType, DataContext, ReceiveTime
+  </sql>
+  <!-- 等待返回指令 -->
+  <select id="selectDataTemp" resultMap="BaseResultMap" parameterType="Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from Data_temp
+    where code = #{address} 
+    and ContralType = #{controlId} 
+    and DATE_FORMAT(ReceiveTime,'%Y-%m-%d %H:%i:%s') <![CDATA[>=]]> DATE_FORMAT(#{startDate} ,'%Y-%m-%d %H:%i:%s')
+    and DATE_FORMAT(ReceiveTime,'%Y-%m-%d %H:%i:%s') <![CDATA[<=]]> DATE_FORMAT(#{endDate} ,'%Y-%m-%d %H:%i:%s')
+    order by ReceiveTime desc limit 1
+  </select>
+  <!-- 等待返回指令列表 -->
+  <select id="selectDataTempForList" resultMap="BaseResultMap" parameterType="Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from Data_temp
+    where code = #{address} 
+    and ContralType = #{controlId} 
+    and DATE_FORMAT(ReceiveTime,'%Y-%m-%d %H:%i:%s') <![CDATA[>=]]> DATE_FORMAT(#{startDate} ,'%Y-%m-%d %H:%i:%s')
+    and DATE_FORMAT(ReceiveTime,'%Y-%m-%d %H:%i:%s') <![CDATA[<=]]> DATE_FORMAT(#{endDate} ,'%Y-%m-%d %H:%i:%s')
+  </select>
+  <!-- 通过检查心跳包，监测判断主机是否在线 -->
+  <select id="selectDataCount" resultType="java.lang.Integer" parameterType="Map" >
+    select count(*) as num
+    from Data_temp d
+    left join ControlHost c 
+    on d.code = c.code
+    left join Project p
+    on c.ProjectId = p.id
+    where p.id = #{pId}
+    and DATE_FORMAT(ReceiveTime,'%Y-%m-%d %H:%i:%s') <![CDATA[>=]]> DATE_FORMAT(#{lastTime} ,'%Y-%m-%d %H:%i:%s')
+  </select>
+  <!-- 获取最新的报警指令 -->
+  <select id="selectDataMax" resultMap="BaseResultMap" parameterType="Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from Data_temp
+    where code = #{code} 
+    and ContralType = #{ContralType} 
+    order by ReceiveTime desc limit 1
+  </select>
+  <!-- 查询所有历史数据list -->
+  <select id="selectAllOldData" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from Data_temp
+    where DATE_FORMAT(ReceiveTime,'%Y-%m-%d') <![CDATA[<=]]> DATE_FORMAT(DATE_SUB(curdate(), INTERVAL 1 DAY) ,'%Y-%m-%d')
+  </select>
+  <!-- 将接受的指令存储到临时数据表中 -->
+  <insert id="insert" parameterType="com.rest.yun.beans.DataTemp" >
+    insert into Data_temp ( code, ContralType, 
+      dataContext, ReceiveTime)
+    values ( #{code,jdbcType=VARCHAR}, #{contraltype,jdbcType=VARCHAR}, 
+      #{datacontext,jdbcType=VARCHAR}, #{receivetime,jdbcType=TIMESTAMP})
+  </insert>
+  <!-- 删除超过一天的历史数据 -->
+	<delete id = "deleteAllOldData" parameterType = "java.util.List">
+		<![CDATA[ delete from Data_temp where id in ]]>
+			<foreach collection="list" item = "model" open="(" separator="," close=")">
+          		#{ model.id}
+        	</foreach>
+	</delete>
+</mapper>

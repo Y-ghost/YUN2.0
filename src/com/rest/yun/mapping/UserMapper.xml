@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rest.yun.mapping.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.rest.yun.beans.User" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="LoginName" property="loginname" jdbcType="VARCHAR" />
+    <result column="Password" property="password" jdbcType="VARCHAR" />
+    <result column="Username" property="username" jdbcType="VARCHAR" />
+    <result column="Role" property="role" jdbcType="INTEGER" />
+    <result column="Email" property="email" jdbcType="VARCHAR" />
+    <result column="Phone" property="phone" jdbcType="VARCHAR" />
+    <result column="Address" property="address" jdbcType="VARCHAR" />
+    <result column="Website" property="website" jdbcType="VARCHAR" />
+    <result column="RightContent" property="rightcontent" jdbcType="VARCHAR" />
+    <result column="validCode" property="validcode" jdbcType="VARCHAR" />
+    <result column="outdate" property="outdate" jdbcType="TIMESTAMP" />
+    <result column="clientID" property="clientid" jdbcType="VARCHAR" />
+    <result column="Createuser" property="createuser" jdbcType="INTEGER" />
+    <result column="Createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="Modifyuser" property="modifyuser" jdbcType="INTEGER" />
+    <result column="Modifytime" property="modifytime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, LoginName, Username, Role, Email, Phone, Address, Website, RightContent, 
+    validCode, outdate, clientID, Createuser, Createtime, Modifyuser, Modifytime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from User
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <!-- 根据主机id查询用户信息 -->
+  <select id="selectUserByHostCode" resultMap="BaseResultMap" parameterType="String" >
+    select u.*
+    from User u 
+	left join UserProjectRel up on u.id = up.UserId
+	left join Project p on up.ProjectId = p.id 
+	left join ControlHost c on c.ProjectId = p.id
+	where c.code = #{hostCode,jdbcType=VARCHAR} 
+  </select>
+  <!-- 根据登录名查询用户是否存在 -->
+  <select id="validUser" resultMap="BaseResultMap" parameterType="String" >
+    select u.*
+    from User u 
+	where u.LoginName = #{loginname,jdbcType=VARCHAR} 
+	or u.Email = #{loginname,jdbcType=VARCHAR} 
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from User
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.rest.yun.beans.User" >
+    insert into User (id, LoginName, Password, 
+      Username, Role, Email, 
+      Phone, Address, Website, 
+      RightContent, validCode, outdate, 
+      clientID, Createuser, Createtime, 
+      Modifyuser, Modifytime)
+    values (#{id,jdbcType=INTEGER}, #{loginname,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{username,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{website,jdbcType=VARCHAR}, 
+      #{rightcontent,jdbcType=VARCHAR}, #{validcode,jdbcType=VARCHAR}, #{outdate,jdbcType=TIMESTAMP}, 
+      #{clientid,jdbcType=VARCHAR}, #{createuser,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{modifyuser,jdbcType=INTEGER}, #{modifytime,jdbcType=TIMESTAMP})
+  </insert>
+  <!-- 注册新用户 -->
+  <insert id="saveUser" parameterType="com.rest.yun.beans.User" >
+    insert into User
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loginname != null" >
+        LoginName,
+      </if>
+      <if test="password != null" >
+        Password,
+      </if>
+      <if test="username != null" >
+        Username,
+      </if>
+      <if test="role != null" >
+        Role,
+      </if>
+      <if test="email != null" >
+        Email,
+      </if>
+      <if test="phone != null" >
+        Phone,
+      </if>
+      <if test="address != null" >
+        Address,
+      </if>
+      <if test="website != null" >
+        Website,
+      </if>
+      <if test="rightcontent != null" >
+        RightContent,
+      </if>
+      <if test="validcode != null" >
+        validCode,
+      </if>
+      <if test="outdate != null" >
+        outdate,
+      </if>
+      <if test="clientid != null" >
+        clientID,
+      </if>
+      <if test="createuser != null" >
+        Createuser,
+      </if>
+      <if test="createtime != null" >
+        Createtime,
+      </if>
+      <if test="modifyuser != null" >
+        Modifyuser,
+      </if>
+      <if test="modifytime != null" >
+        Modifytime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="loginname != null" >
+        #{loginname,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null" >
+        #{role,jdbcType=INTEGER},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="website != null" >
+        #{website,jdbcType=VARCHAR},
+      </if>
+      <if test="rightcontent != null" >
+        #{rightcontent,jdbcType=VARCHAR},
+      </if>
+      <if test="validcode != null" >
+        #{validcode,jdbcType=VARCHAR},
+      </if>
+      <if test="outdate != null" >
+        #{outdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="clientid != null" >
+        #{clientid,jdbcType=VARCHAR},
+      </if>
+      <if test="createuser != null" >
+        #{createuser,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyuser != null" >
+        #{modifyuser,jdbcType=INTEGER},
+      </if>
+      <if test="modifytime != null" >
+        #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <!-- 更新用户信息 -->
+  <update id="update" parameterType="com.rest.yun.beans.User" >
+    update User
+    <set >
+      <if test="loginname != null" >
+        LoginName = #{loginname,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        Password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        Username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null" >
+        Role = #{role,jdbcType=INTEGER},
+      </if>
+      <if test="email != null" >
+        Email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        Phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        Address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="website != null" >
+        Website = #{website,jdbcType=VARCHAR},
+      </if>
+      <if test="rightcontent != null" >
+        RightContent = #{rightcontent,jdbcType=VARCHAR},
+      </if>
+      <if test="validcode != null" >
+        validCode = #{validcode,jdbcType=VARCHAR},
+      </if>
+      <if test="outdate != null" >
+        outdate = #{outdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="clientid != null" >
+        clientID = #{clientid,jdbcType=VARCHAR},
+      </if>
+      <if test="createuser != null" >
+        Createuser = #{createuser,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        Createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyuser != null" >
+        Modifyuser = #{modifyuser,jdbcType=INTEGER},
+      </if>
+      <if test="modifytime != null" >
+        Modifytime = #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!-- 修改用户密码 -->
+  <update id="modifyPassword" parameterType="Map" >
+    update User
+    set Password = #{password,jdbcType=VARCHAR},
+    validCode = #{validCode,jdbcType=VARCHAR}
+    where id = #{userId,jdbcType=INTEGER}
+  </update>
+  
+    <!-- Select Users by some parameters -->
+  <select id="selectUserForList" parameterType="map" resultMap="BaseResultMap">
+	
+	 select <include refid="Base_Column_List"/> from User 
+	 <where>
+	 	<if test="loginName != null and loginName != ''">
+		  	LoginName = #{loginName}
+		</if>
+	 	<if test="userId != 1">
+		  	and id = #{userId}
+		</if>
+	 </where>
+	 
+	 order by 
+	 <choose>
+	 	<when test="sortField != null and sortField != ''">
+	 		${sortField}
+	 	</when>
+	 	<otherwise>
+	 		Createtime
+	 	</otherwise>
+	 </choose>
+	 
+	 <choose>
+	 	<when test="sortDirection != null and sortDirection != ''">
+	 		${sortDirection}
+	 	</when>
+	 	<otherwise>
+	 		desc
+	 	</otherwise>
+	 </choose>
+	</select>
+</mapper>

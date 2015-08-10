@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rest.yun.mapping.SensorInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.rest.yun.beans.SensorInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="EquipmentId" property="equipmentid" jdbcType="INTEGER" />
+    <result column="Number" property="number" jdbcType="INTEGER" />
+    <result column="ParameterA" property="parametera" jdbcType="REAL" />
+    <result column="ParameterB" property="parameterb" jdbcType="REAL" />
+    <result column="ParameterC" property="parameterc" jdbcType="REAL" />
+    <result column="ParameterD" property="parameterd" jdbcType="REAL" />
+    <result column="Createuser" property="createuser" jdbcType="INTEGER" />
+    <result column="Createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="Modifyuser" property="modifyuser" jdbcType="INTEGER" />
+    <result column="Modifytime" property="modifytime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, EquipmentId, Number, ParameterA, ParameterB, ParameterC, ParameterD, Createuser, 
+    Createtime, Modifyuser, Modifytime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from SensorInfo
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <!-- 根据节点id和传感器序号查询节点 -->
+  <select id="selectByEidAndNum" resultMap="BaseResultMap" parameterType="Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from SensorInfo
+    where EquipmentId = #{eId,jdbcType=INTEGER}
+    and Number = #{num,jdbcType=INTEGER}
+  </select>
+  <!-- 根据节点id和传感器序号查询节点 -->
+  <select id="selectSensorInfoByEid" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from SensorInfo
+    where EquipmentId = #{eId,jdbcType=INTEGER}
+    order by Number asc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from SensorInfo
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <!-- 根据主机id删除其关联的所有传感器信息 -->
+  <delete id="deleteAllByHid" parameterType="java.lang.Integer" >
+    delete s from SensorInfo s
+    left join equipment e on s.EquipmentId = e.id
+    left join ControlHost c on e.controlHostId = c.id
+    where c.id = #{controlHostId,jdbcType=INTEGER};
+  </delete>
+  <!-- 批量注册传感器 -->
+  <insert id="save" parameterType="java.util.List" >
+    <![CDATA[
+	    insert into SensorInfo (EquipmentId, Number, Createuser, Createtime, Modifyuser, Modifytime)
+	    values 
+    ]]>
+    <foreach collection="list" item="item" index="index" separator=",">
+		(#{item.equipmentid}, #{item.number}, #{item.createuser},
+		#{item.createtime},#{item.modifyuser},#{item.modifytime})
+	</foreach>
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.rest.yun.beans.SensorInfo" >
+    insert into SensorInfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="equipmentid != null" >
+        EquipmentId,
+      </if>
+      <if test="number != null" >
+        Number,
+      </if>
+      <if test="parametera != null" >
+        ParameterA,
+      </if>
+      <if test="parameterb != null" >
+        ParameterB,
+      </if>
+      <if test="parameterc != null" >
+        ParameterC,
+      </if>
+      <if test="parameterd != null" >
+        ParameterD,
+      </if>
+      <if test="createuser != null" >
+        Createuser,
+      </if>
+      <if test="createtime != null" >
+        Createtime,
+      </if>
+      <if test="modifyuser != null" >
+        Modifyuser,
+      </if>
+      <if test="modifytime != null" >
+        Modifytime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="equipmentid != null" >
+        #{equipmentid,jdbcType=INTEGER},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="parametera != null" >
+        #{parametera,jdbcType=REAL},
+      </if>
+      <if test="parameterb != null" >
+        #{parameterb,jdbcType=REAL},
+      </if>
+      <if test="parameterc != null" >
+        #{parameterc,jdbcType=REAL},
+      </if>
+      <if test="parameterd != null" >
+        #{parameterd,jdbcType=REAL},
+      </if>
+      <if test="createuser != null" >
+        #{createuser,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyuser != null" >
+        #{modifyuser,jdbcType=INTEGER},
+      </if>
+      <if test="modifytime != null" >
+        #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rest.yun.beans.SensorInfo" >
+    update SensorInfo
+    <set >
+      <if test="equipmentid != null" >
+        EquipmentId = #{equipmentid,jdbcType=INTEGER},
+      </if>
+      <if test="number != null" >
+        Number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="parametera != null" >
+        ParameterA = #{parametera,jdbcType=REAL},
+      </if>
+      <if test="parameterb != null" >
+        ParameterB = #{parameterb,jdbcType=REAL},
+      </if>
+      <if test="parameterc != null" >
+        ParameterC = #{parameterc,jdbcType=REAL},
+      </if>
+      <if test="parameterd != null" >
+        ParameterD = #{parameterd,jdbcType=REAL},
+      </if>
+      <if test="createuser != null" >
+        Createuser = #{createuser,jdbcType=INTEGER},
+      </if>
+      <if test="createtime != null" >
+        Createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyuser != null" >
+        Modifyuser = #{modifyuser,jdbcType=INTEGER},
+      </if>
+      <if test="modifytime != null" >
+        Modifytime = #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rest.yun.beans.SensorInfo" >
+    update SensorInfo
+    set EquipmentId = #{equipmentid,jdbcType=INTEGER},
+      Number = #{number,jdbcType=INTEGER},
+      ParameterA = #{parametera,jdbcType=REAL},
+      ParameterB = #{parameterb,jdbcType=REAL},
+      ParameterC = #{parameterc,jdbcType=REAL},
+      ParameterD = #{parameterd,jdbcType=REAL},
+      Createuser = #{createuser,jdbcType=INTEGER},
+      Createtime = #{createtime,jdbcType=TIMESTAMP},
+      Modifyuser = #{modifyuser,jdbcType=INTEGER},
+      Modifytime = #{modifytime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

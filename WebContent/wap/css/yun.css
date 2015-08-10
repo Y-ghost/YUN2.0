@@ -1,0 +1,257 @@
+/* Common */
+.yun-title {
+	height: 60px;
+	text-align: center;
+	font: 18px/60px microsoft yahei;
+}
+
+/* Start login */
+.login-oper {
+	padding: 10px 15px
+}
+.login-form {
+	margin-top: 50px;
+}
+.login-oper span {
+	width: 50%;
+	text-align: left;
+}
+.login-oper span.fr {
+	text-align: right;
+}
+.h40 {
+	height: 40px;
+}
+.error_alert {
+	font-size: 14px;
+	color: red !important;
+	line-height: 40px;
+}
+/* ---End login---- */
+
+/* Forget Password*/
+.passport-progress {
+}
+
+.passport-progress {
+	margin: 0 auto;
+	font-family: 'Microsoft YaHei';
+	margin-bottom: 20px;
+}
+
+.passport-progress ul li.current {
+	background-color: #1b926c;
+	color: #fff;
+}
+
+.passport-progress ul li {
+	width: 33%;
+	background-color: #e4e4e4;
+	text-align: center;
+	font-size: 14px;
+	line-height: 31px;
+	float: left;
+	position: relative;
+}
+
+.passport-progress ul {
+	border-radius: 5px;
+	overflow: hidden;
+}
+.passport-progress ul li em {
+	position: absolute;
+	left: -16px;
+	top: 0;
+	width: 32px;
+	height: 31px;
+	background: url(../../images/arrow_progress.png)
+		no-repeat;
+}
+.code {
+	float: left;
+	margin-right: 10px;
+	text-align: center;
+	height: 40px;
+	line-height: 30px;
+	width: 140px;
+	font-size:20px;
+	background-color: #e4e4e4;
+	font-family: Arial;
+	font-style: italic;
+	color: Red;
+	letter-spacing: 4px;
+	font-weight: 700;
+}
+.codeBtn {
+	float: left;
+	color: #1b926c;
+	font-weight: 700;
+	text-align: center;
+	height: 40px;
+	padding-top: 15px;
+	width: 140px;
+}
+.ope-tips {
+	color: #21292c;
+	text-align: center;
+	font-size: 24px;
+	font-weight: 700;
+}
+.ope-tips-success {
+	vertical-align: middle;
+	line-height: 1.2;
+}
+.ope-tips-success i {
+	background: url(../../images/ico_success.png) no-repeat 0 0;
+	background-size: 18px 18px;
+	width: 18px;
+	height: 18px;
+	display: inline-block;
+	margin-right: 8px;
+}
+.hepl-b-tips {
+	color: #5a5f7d;
+	font-size: 14px;
+	text-align: center;
+	margin-top: 10px;
+}
+
+/*-----End Forget Password*/
+
+/*Start Index And Message*/
+.menu {
+	margin-top : 0px;
+}
+.menu ul li {
+	padding: 0 10px;
+	/*height: 40px;*/
+	line-height: 40px;
+	border-bottom: 1px solid #ccc;
+	font-size: 16px;
+}
+
+.menu ul li a{
+	width:90%;
+	display: inline-block;
+}
+
+.menu ul li .project-item {
+	width:85%;
+}
+
+#wrapper {
+	position: absolute;
+	z-index: 1;
+	top: 0px;
+	bottom: 48px;
+	left: 0;
+	width: 100%;
+	overflow: hidden;
+}
+
+#scroller {
+	position: absolute;
+	z-index: 1;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	width: 100%;
+	-webkit-transform: translateZ(0);
+	-moz-transform: translateZ(0);
+	-ms-transform: translateZ(0);
+	-o-transform: translateZ(0);
+	transform: translateZ(0);
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-text-size-adjust: none;
+	-moz-text-size-adjust: none;
+	-ms-text-size-adjust: none;
+	-o-text-size-adjust: none;
+	text-size-adjust: none;
+}
+
+#scroller ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	text-align: left;
+}
+
+#scroller li {
+	padding: 0 10px;
+	line-height: 40px;
+	border-bottom: 1px solid #ccc;
+	border-top: 1px solid #fff;
+	/*background-color: #fafafa;*/
+	font-size: 16px;
+}
+.pullDownLabel, .pullUpLabel {color:#999}
+.pullDown, .pullUp {background:#fff;height:40px;line-height:40px;font-weight:bold;font-size:0.8em;color:#888; margin: 0 auto;width: 50%;}
+.pullDown .pullDownIcon, .pullUp .pullUpIcon {display:block;float:left;opacity:0.4;width: 40px;height:40px;background:url(../../images/pull_to_refresh.png) 0 0 no-repeat;-webkit-background-size:40px 80px;-ms-background-size:40px 80px; background-size:40px 80px;-webkit-transition-property:-webkit-transform;-ms-transition-property:-webkit-transform;-webkit-transition-duration:250ms;-ms-transition-duration:250ms}
+.pullDown .pullDownIcon {-webkit-transform:rotate(0deg) translateZ(0);-ms-transform:rotate(0deg) translateZ(0)}
+.pullUp .pullUpIcon  {-webkit-transform:rotate(-180deg) translateZ(0);-ms-transform:rotate(-180deg) translateZ(0)}
+.pullDown.flip .pullDownIcon {-webkit-transform:rotate(-180deg) translateZ(0);-ms-transform:rotate(-180deg) translateZ(0)}
+.pullUp.flip .pullUpIcon {-webkit-transform:rotate(0deg) translateZ(0);-ms-transform:rotate(0deg) translateZ(0)}
+.pullDown.loading .pullDownIcon, .pullUp.loading .pullUpIcon {background-position:0 100%;-webkit-transform:rotate(0deg) translateZ(0);-ms-transform:rotate(0deg) translateZ(0);-webkit-transition-duration:0ms;-ms-transition-duration:0ms;-webkit-animation-name:loading;-ms-animation-name:loading;-webkit-animation-duration:1s;-ms-animation-duration:1s;-webkit-animation-iteration-count:infinite;-ms-animation-iteration-count:infinite;-webkit-animation-timing-function:linear;-ms-animation-timing-function:linear}
+		
+@-webkit-keyframes loading {
+from {-webkit-transform:rotate(0deg) translateZ(0)}
+to {-webkit-transform:rotate(360deg) translateZ(0)}
+}
+@-ms-keyframes loading {
+	from {-ms-transform:rotate(0deg) translateZ(0)}
+	to {-ms-transform:rotate(360deg) translateZ(0)}
+}
+
+.menu .fa {
+	line-height: 40px;
+}
+.ul-data .detail {
+	font-size: 12px;
+	line-height : 20px;
+	overflow: hidden;
+}
+.ul-datat .detail div{
+	margin-bottom : 5px;
+}
+
+.ul-data .detail div:first-child{
+	margin-top : 5px;
+}
+
+.ul-data .detail .detail-item-c{
+	margin-left : 15px;
+}
+.detail .fr {
+	position:relative;
+}
+.fr .fa {
+	color:#28A92A;
+}
+.switch {
+	position: absolute;
+	color: #fff;
+	font-size: 14px;
+}
+/*---End Index And Message---*/
+
+.busy-layer {
+    height: 100%;
+    width: 100%;
+    background: transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999;
+}
+.busy-layer .busy-text {
+    font-size: 20px;
+    color: #fff;
+    text-align: center;
+    margin-top: 150px;
+}
+.busy-layer .busy-text img {
+	background:url(../../images/loading.gif) 0 0 no-repeat;
+}
